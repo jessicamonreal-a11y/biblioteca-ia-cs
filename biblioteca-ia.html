@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biblioteca de Ferramentas e Prompts de IA - CS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f8f7fc;
+    --surface: #ffffff;
+    --surface-2: #f0edf9;
+    --border: #e2dcf5;
+    --border-strong: #c5b8f0;
+    --purple-dark: #4c3d9e;
+    --purple-mid: #6b5bc4;
+    --purple-light: #9d8ee0;
+    --blue-dark: #1e4fa8;
+    --blue-mid: #3a6fd4;
+    --blue-light: #89aef0;
+    --text-primary: #1a1630;
+    --text-secondary: #5a5380;
+    --text-muted: #9892b8;
+    --accent: #7c6fd4;
+    --accent-hover: #6458c2;
+    --tag-bg: #eceaf8;
+    --tag-text: #5a4faa;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: 0 0 80px;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 28px 40px 24px;
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  header .logo-mark {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, var(--purple-mid), var(--blue-mid));
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  header .logo-mark svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: white;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--text-primary);
+    letter-spacing: -0.3px;
+  }
+
+  header span.tagline {
+    margin-left: auto;
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 300;
+    padding-bottom: 2px;
+  }
+
+  /* NAV PILLS */
+  .nav-tabs {
+    display: flex;
+    gap: 8px;
+    padding: 20px 40px 0;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .nav-tab {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text-muted);
+    padding: 10px 18px 12px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color 0.15s, border-color 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .nav-tab svg {
+    width: 16px;
+    height: 16px;
+    opacity: 0.6;
+    transition: opacity 0.15s;
+  }
+
+  .nav-tab:hover { color: var(--purple-mid); }
+  .nav-tab:hover svg { opacity: 0.9; }
+
+  .nav-tab.active {
+    color: var(--purple-dark);
+    border-bottom-color: var(--purple-mid);
+    font-weight: 500;
+  }
+
+  .nav-tab.active svg { opacity: 1; }
+
+  /* MAIN CONTENT */
+  main { max-width: 1100px; margin: 0 auto; padding: 36px 40px; }
+
+  /* SECTION HEADER */
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    font-weight: 400;
+    color: var(--text-primary);
+    letter-spacing: -0.4px;
+  }
+
+  .section-subtitle {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-top: 4px;
+    font-weight: 300;
+  }
+
+  .btn-add {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--purple-dark);
+    background: var(--tag-bg);
+    border: 1px solid var(--border-strong);
+    border-radius: 8px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    text-decoration: none;
+  }
+
+  .btn-add:hover {
+    background: #e4dff7;
+    border-color: var(--purple-light);
+  }
+
+  .btn-add svg {
+    width: 15px;
+    height: 15px;
+    stroke: var(--purple-dark);
+  }
+
+  /* SECTION PANEL */
+  .section-panel { display: none; }
+  .section-panel.active { display: block; }
+
+  /* ============================
+     FERRAMENTAS
+  ============================ */
+  .category-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 32px 0 12px;
+    padding-left: 2px;
+  }
+
+  .category-label:first-of-type { margin-top: 0; }
+
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+  }
+
+  .tool-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px;
+    text-decoration: none;
+    transition: border-color 0.15s, transform 0.12s, box-shadow 0.15s;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tool-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--purple-mid), var(--blue-mid));
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .tool-card:hover {
+    border-color: var(--border-strong);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(76, 61, 158, 0.08);
+  }
+
+  .tool-card:hover::before { opacity: 1; }
+
+  .tool-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+
+  .tool-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    line-height: 1.3;
+  }
+
+  .tool-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 300;
+    line-height: 1.5;
+    flex: 1;
+  }
+
+  .tool-tag {
+    display: inline-flex;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--tag-text);
+    background: var(--tag-bg);
+    border-radius: 6px;
+    padding: 3px 9px;
+    align-self: flex-start;
+  }
+
+  .tool-arrow {
+    position: absolute;
+    right: 16px;
+    top: 16px;
+    width: 18px;
+    height: 18px;
+    stroke: var(--text-muted);
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+
+  .tool-card:hover .tool-arrow { opacity: 1; }
+
+  /* ============================
+     PROMPTS
+  ============================ */
+  .prompts-layout {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  .prompt-sidebar {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 12px;
+    position: sticky;
+    top: 100px;
+  }
+
+  .sidebar-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 8px 10px 6px;
+  }
+
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    padding: 8px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.12s, color 0.12s;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+  }
+
+  .sidebar-item:hover { background: var(--surface-2); color: var(--text-primary); }
+  .sidebar-item.active { background: var(--tag-bg); color: var(--purple-dark); font-weight: 500; }
+
+  .sidebar-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--border-strong);
+    flex-shrink: 0;
+  }
+
+  .sidebar-item.active .sidebar-dot { background: var(--purple-mid); }
+
+  .prompt-count {
+    margin-left: auto;
+    font-size: 11px;
+    background: var(--border);
+    color: var(--text-muted);
+    border-radius: 10px;
+    padding: 1px 7px;
+  }
+
+  .sidebar-item.active .prompt-count {
+    background: var(--border-strong);
+    color: var(--purple-dark);
+  }
+
+  /* Prompt cards */
+  .prompts-list { display: flex; flex-direction: column; gap: 12px; }
+
+  .prompt-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 24px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+
+  .prompt-card:hover {
+    border-color: var(--border-strong);
+    box-shadow: 0 4px 16px rgba(76, 61, 158, 0.07);
+  }
+
+  .prompt-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  .prompt-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-primary);
+    line-height: 1.35;
+  }
+
+  .prompt-actions {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .prompt-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.12s, border-color 0.12s;
+    color: var(--text-muted);
+  }
+
+  .prompt-btn:hover {
+    background: var(--surface-2);
+    border-color: var(--border-strong);
+    color: var(--purple-dark);
+  }
+
+  .prompt-btn svg {
+    width: 14px;
+    height: 14px;
+    stroke: currentColor;
+    fill: none;
+  }
+
+  .prompt-text {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    font-weight: 300;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 16px;
+    position: relative;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .prompt-footer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+
+  .prompt-tag {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--tag-text);
+    background: var(--tag-bg);
+    border-radius: 6px;
+    padding: 3px 10px;
+  }
+
+  .prompt-date {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-left: auto;
+  }
+
+  /* empty state */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-muted);
+  }
+
+  .empty-icon {
+    font-size: 40px;
+    margin-bottom: 12px;
+    opacity: 0.4;
+  }
+
+  .empty-state p { font-size: 14px; font-weight: 300; }
+
+  /* TOAST */
+  #toast {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--purple-dark);
+    color: white;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    padding: 10px 20px;
+    border-radius: 10px;
+    opacity: 0;
+    transition: opacity 0.2s, transform 0.2s;
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: 200;
+  }
+
+  #toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  @media (max-width: 700px) {
+    header { padding: 20px; flex-wrap: wrap; }
+    header span.tagline { display: none; }
+    .nav-tabs { padding: 16px 20px 0; }
+    main { padding: 24px 20px; }
+    .prompts-layout { grid-template-columns: 1fr; }
+    .prompt-sidebar { position: static; }
+    .tools-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <img src="data:image/png;base64,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" style="height: 36px; width: auto; object-fit: contain;" alt="Nuvem Envio">
+  <h1>Biblioteca de Ferramentas e Prompts de IA - CS</h1>
+</header>
+
+<div class="nav-tabs">
+  <button class="nav-tab active" onclick="switchTab('ferramentas', this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+    Ferramentas
+  </button>
+  <button class="nav-tab" onclick="switchTab('prompts', this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    Prompts
+  </button>
+</div>
+
+<main>
+
+  <!-- ========== FERRAMENTAS ========== -->
+  <div class="section-panel active" id="panel-ferramentas">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Ferramentas</div>
+        <div class="section-subtitle">Seus links favoritos, sempre à mão</div>
+      </div>
+
+    </div>
+
+    <div class="tools-grid" id="grid-ia">
+
+      <a href="https://gerador-graficos-cs-mandae.streamlit.app/" target="_blank" class="tool-card">
+        <svg class="tool-arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+        <div class="tool-icon">📊</div>
+        <div class="tool-name">Gerador de Gráficos</div>
+        <div class="tool-desc">Gera gráficos a partir dos relatórios em Excel retirados do Zendesk.</div>
+        <span class="tool-tag">Zendesk</span>
+      </a>
+
+      <a href="https://simulador-tabela.netlify.app/" target="_blank" class="tool-card">
+        <svg class="tool-arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+        <div class="tool-icon">🧮</div>
+        <div class="tool-name">Simulador de Tabela</div>
+        <div class="tool-desc">Simula a fatura do cliente em trocas de tabela.</div>
+        <span class="tool-tag">Simulador</span>
+      </a>
+
+      <a href="https://apresentacao-black.netlify.app/" target="_blank" class="tool-card">
+        <svg class="tool-arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+        <div class="tool-icon">📑</div>
+        <div class="tool-name">Gerador de Apresentações</div>
+        <div class="tool-desc">Gera apresentações com institucional, performance e tickets CS a partir do relatório de Volumetria ou Databricks.</div>
+        <span class="tool-tag">Apresentações</span>
+      </a>
+
+      <a href="https://simuladormv-ppmetneeg7uuzwzlajbznk.streamlit.app/" target="_blank" class="tool-card">
+        <svg class="tool-arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+        <div class="tool-icon">📦</div>
+        <div class="tool-name">Simulador MV</div>
+        <div class="tool-desc">Simulador de preços e prazos para Múltiplos Volumes.</div>
+        <span class="tool-tag">Simulador</span>
+      </a>
+
+      <a href="https://calendario-coletas.streamlit.app/" target="_blank" class="tool-card">
+        <svg class="tool-arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+        <div class="tool-icon">📅</div>
+        <div class="tool-name">Calendário de Coletas</div>
+        <div class="tool-desc">Calendário de rotas calendarizadas de coleta.</div>
+        <span class="tool-tag">Coletas</span>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- ========== PROMPTS ========== -->
+  <div class="section-panel" id="panel-prompts">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Biblioteca de Prompts</div>
+        <div class="section-subtitle">Seus melhores prompts organizados por categoria</div>
+      </div>
+
+    </div>
+
+    <div class="prompts-layout">
+      <div class="prompt-sidebar">
+        <div class="sidebar-label">Categorias</div>
+        <button class="sidebar-item active" onclick="filterPrompts('todos', this)">
+          <span class="sidebar-dot"></span> Todos
+          <span class="prompt-count" id="count-todos">1</span>
+        </button>
+        <button class="sidebar-item" onclick="filterPrompts('relatorios', this)">
+          <span class="sidebar-dot"></span> Relatórios
+          <span class="prompt-count" id="count-relatorios">1</span>
+        </button>
+      </div>
+
+      <div class="prompts-list" id="prompts-list">
+
+        <div class="prompt-card" data-cat="relatorios">
+          <div class="prompt-card-header">
+            <div class="prompt-title">Gerar relatório de envios (Volumetria)</div>
+            <div class="prompt-actions">
+              <button class="prompt-btn" title="Copiar" onclick="copyPrompt(this)">
+                <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              </button>
+              <button class="prompt-btn" title="Editar" onclick="editPrompt(this)">
+                <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="prompt-text">Fazer um dash em html sobre os envios do cliente Thera Cosméticos, colocando a quantidade de envios por mês, % de atrasos, % de devoluções, % de extravios, distribuição regional, modalidade de entrega (rápido e econômico). Fazer esse dash em tons claros, com azul e arroxeado.</div>
+          <div class="prompt-footer">
+            <span class="prompt-tag">Relatórios</span>
+            <span class="prompt-date">Extração de Dados — Volumetria</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<div id="toast">✓ Copiado!</div>
+
+<script>
+function switchTab(id, btn) {
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('panel-' + id).classList.add('active');
+}
+
+function filterPrompts(cat, btn) {
+  document.querySelectorAll('.sidebar-item').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.prompt-card').forEach(card => {
+    card.style.display = (cat === 'todos' || card.dataset.cat === cat) ? '' : 'none';
+  });
+}
+
+function copyPrompt(btn) {
+  const text = btn.closest('.prompt-card').querySelector('.prompt-text').textContent.trim();
+  navigator.clipboard.writeText(text).then(() => showToast('✓ Prompt copiado!'));
+}
+
+function editPrompt(btn) {
+  const card = btn.closest('.prompt-card');
+  const textEl = card.querySelector('.prompt-text');
+  const titleEl = card.querySelector('.prompt-title');
+  const current = textEl.textContent;
+  const newText = prompt('Editar prompt:', current);
+  if (newText !== null && newText.trim()) textEl.textContent = newText.trim();
+}
+
+function addTool() {
+  const name = prompt('Nome da ferramenta:');
+  if (!name) return;
+  const url = prompt('URL (ex: https://exemplo.com):');
+  if (!url) return;
+  const desc = prompt('Descrição curta:') || '';
+  const emoji = prompt('Emoji (opcional, ex: 🔧):') || '🔗';
+
+  const card = document.createElement('a');
+  card.href = url;
+  card.target = '_blank';
+  card.className = 'tool-card';
+  card.innerHTML = `
+    <svg class="tool-arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+    <div class="tool-icon">${emoji}</div>
+    <div class="tool-name">${name}</div>
+    <div class="tool-desc">${desc}</div>
+    <span class="tool-tag">Link</span>
+  `;
+
+  const grids = document.querySelectorAll('.tools-grid');
+  const lastGrid = grids[grids.length - 1];
+  const dashed = lastGrid.querySelector('[style*="dashed"]');
+  if (dashed) lastGrid.insertBefore(card, dashed);
+  else lastGrid.appendChild(card);
+
+  showToast('✓ Ferramenta adicionada!');
+}
+
+function addPrompt() {
+  const title = prompt('Título do prompt:');
+  if (!title) return;
+  const text = prompt('Texto do prompt:');
+  if (!text) return;
+  const cats = ['escrita', 'analise', 'codigo'];
+  const catInput = prompt('Categoria (escrita / analise / codigo):') || 'outros';
+  const cat = cats.includes(catInput.toLowerCase()) ? catInput.toLowerCase() : 'outros';
+
+  const card = document.createElement('div');
+  card.className = 'prompt-card';
+  card.dataset.cat = cat;
+
+  const label = cat === 'escrita' ? 'Escrita' : cat === 'analise' ? 'Análise' : cat === 'codigo' ? 'Código' : 'Outros';
+
+  card.innerHTML = `
+    <div class="prompt-card-header">
+      <div class="prompt-title">${title}</div>
+      <div class="prompt-actions">
+        <button class="prompt-btn" title="Copiar" onclick="copyPrompt(this)">
+          <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        </button>
+        <button class="prompt-btn" title="Editar" onclick="editPrompt(this)">
+          <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="prompt-text">${text}</div>
+    <div class="prompt-footer">
+      <span class="prompt-tag">${label}</span>
+      <span class="prompt-date">Adicionado agora</span>
+    </div>
+  `;
+
+  document.getElementById('prompts-list').prepend(card);
+  updateCounts();
+  showToast('✓ Prompt adicionado!');
+}
+
+function updateCounts() {
+  const all = document.querySelectorAll('.prompt-card');
+  document.getElementById('count-todos').textContent = all.length;
+  ['relatorios'].forEach(cat => {
+    const el = document.getElementById('count-' + cat);
+    if (el) el.textContent = document.querySelectorAll(`.prompt-card[data-cat="${cat}"]`).length;
+  });
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+</script>
+</body>
+</html>
