@@ -623,11 +623,11 @@
         <div class="sidebar-label">Categorias</div>
         <button class="sidebar-item active" onclick="filterPrompts('todos', this)">
           <span class="sidebar-dot"></span> Todos
-          <span class="prompt-count" id="count-todos">1</span>
+          <span class="prompt-count" id="count-todos">2</span>
         </button>
         <button class="sidebar-item" onclick="filterPrompts('relatorios', this)">
           <span class="sidebar-dot"></span> Relatórios
-          <span class="prompt-count" id="count-relatorios">1</span>
+          <span class="prompt-count" id="count-relatorios">2</span>
         </button>
       </div>
 
@@ -635,14 +635,75 @@
 
         <div class="prompt-card" data-cat="relatorios">
           <div class="prompt-card-header">
-            <div class="prompt-title">Gerar relatório de envios (Volumetria)</div>
+            <div class="prompt-title">Gerar dashboard de performance dos envios</div>
             <div class="prompt-actions">
               <button class="prompt-btn" title="Copiar" onclick="copyPrompt(this)">
                 <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
               </button>
             </div>
           </div>
-          <div class="prompt-text">Fazer um dash em html sobre os envios do cliente NOME DO CLIENTE, colocando a quantidade de envios por mês, % de atrasos, % de devoluções, % de extravios, distribuição regional, modalidade de entrega (rápido e econômico). Fazer esse dash em tons claros, com azul e arroxeado.</div>
+          <div class="prompt-text">Tenho um arquivo `.xlsx` com dados de envios de um cliente (colunas: `email`, `nome`, `id`, `motivo_criacao`, `codigo_rastreamento`, `codigo_transportadora`, `unidade`, `nro_nf`, `chave_nfe`, `nome_destinatario`, `email_destinatario`, `cpf_destinatario`, `cidade_destino`, `bairro_destino`, `endereco_destino`, `servico_envio`, `transportadora`, `data_envio`, `data_previsao_entrega_cliente`, `data_entrega`, `status`, `uf`, `cep_destino`, `localidade_destino`, `peso_kg`, `altura`, `comprimento`, `largura`, `peso_cubado`, `valor_declarado`, `preco_frete`).
+Gere um dashboard em HTML com os seguintes requisitos:
+Visual: Tons claros com azul e roxo/lavanda. Fontes Syne (títulos) + DM Sans (corpo). Fundo `#f4f3f9`, cards brancos com borda `#dbd7ef`, primária `#5b4fcf`. Animações suaves de entrada nas barras e cards.
+Seções e métricas:
+
+1. Header com nome do cliente, período dos dados e badge da transportadora.
+2. 4 KPI cards: total de envios, % de atraso (entregas após `data_previsao_entrega_cliente`), % de devoluções (status contendo "devolv") e ticket médio geral (`valor_declarado`).
+3. Envios por mês (barras horizontais animadas com volume absoluto).
+4. Modalidade de entrega (`servico_envio`) em gráfico donut SVG com legenda.
+5. % de atraso por mês em gráfico de linha SVG com área preenchida, pontos e rótulos — apenas meses com volume representativo de entregas concluídas.
+6. Distribuição regional em barras horizontais proporcionais, agrupando UFs nas 5 regiões do Brasil (Sudeste, Sul, Nordeste, Centro-Oeste, Norte).
+7. Status dos envios com barra de proporção e contagem por status.
+8. Ticket médio por mês em barras horizontais com valor em R$.
+9. Ticket médio por região com ranking decrescente, barra proporcional e volume de envios ao lado.
+10. Tabela de distribuição por UF com: ranking, UF em badge colorido, região, volume, % do total, barra visual proporcional e ticket médio com pill colorida (verde &lt; R$230, azul intermediário, roxo ≥ R$300). Incluir campo de busca para filtrar por UF ou região.
+Detalhes técnicos: todo o código em um único `.html` self-contained, sem dependências externas além do Google Fonts. Calcular todos os dados via `pandas` antes de gerar o HTML, embutindo os valores diretamente no JavaScript. Seções separadas por divisores com label em uppercase. Cards com `box-shadow`, `border-radius: 18px` e `hover` com `translateY(-3px)`.</div>
+          <div class="prompt-footer">
+            <span class="prompt-tag">Relatórios</span>
+            <span class="prompt-date">Extração de Dados — Volumetria</span>
+          </div>
+        </div>
+
+        <div class="prompt-card" data-cat="relatorios">
+          <div class="prompt-card-header">
+            <div class="prompt-title">Análise de transportadoras para cliente</div>
+            <div class="prompt-actions">
+              <button class="prompt-btn" title="Copiar" onclick="copyPrompt(this)">
+                <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="prompt-text">Tenho uma planilha de envios de um cliente com as colunas: transportadora, data_envio, status, data_previsao_entrega_cliente, data_entrega, servico_envio (valores "Rápido" e "Econômico"). Status possíveis: "Entregue", "Devolvida para remetente", "Devolvida para Mandaê", "Em devolução", "Extraviada".
+Faça uma análise completa em HTML interativo com 2 dashboards separados:
+─── DASHBOARD 1 — Transportadoras ───────────────────────
+Métricas por transportadora:
+• % atraso = entregues com data_entrega > data_previsao_entrega_cliente ÷ total entregues
+• % devolução = status de devolução ÷ total envios
+• % extravio = status "Extraviada" ÷ total envios
+• Score ponderado = % atraso × 0,5 + % devolução × 0,3 + % extravio × 0,2
+4 abas interativas:
+1. Volume por mês — gráfico de barras empilhadas (top 10) + tabela completa com barra visual de volume
+2. Performance geral — gráfico de barras horizontal (% atraso, devolução, extravio) + tabela com badges coloridos (verde ≤3%, amarelo ≤8%, vermelho >8%)
+3. Ranking — score ponderado com classificação Excelente/Bom/Regular/Crítico (apenas transportadoras com ≥20 envios)
+4. Detalhamento mensal — select de transportadora, gráfico combinado (barras de volume + linhas de %) + tabela mês a mês
+─── DASHBOARD 2 — Mix Rápido vs Econômico ───────────────
+Calcule:
+• Volume e % de cada serviço por mês — identificar se houve mudança de patamar
+• Performance (% atraso, devolução, extravio) separada por serviço e por mês
+• Ranking por serviço com o mesmo score ponderado (mínimo 10 envios por serviço)
+• Tabela de impacto: posição no ranking geral vs. por serviço, com delta (subiu/desceu)
+4 abas interativas:
+1. Mix por mês — barras empilhadas + linha de % Rápido em eixo Y secundário + tabela
+2. Performance por serviço — dois gráficos de linha lado a lado (Rápido | Econômico) + tabela resumo
+3. Ranking por serviço — dois rankings lado a lado
+4. Impacto no ranking geral — tabela comparativa com deltas e score por serviço
+─── Requisitos visuais ──────────────────────────────────
+• HTML único com Chart.js via CDN (sem outras dependências)
+• Paleta azul/verde/âmbar para os três indicadores
+• Badges coloridos: verde ≤3%, amarelo ≤8%, vermelho >8%
+• KPIs resumidos no topo de cada dashboard
+• Tabs interativas, select de transportadora funcional
+• Destacar visualmente mudanças de patamar no mix de serviços</div>
           <div class="prompt-footer">
             <span class="prompt-tag">Relatórios</span>
             <span class="prompt-date">Extração de Dados — Volumetria</span>
