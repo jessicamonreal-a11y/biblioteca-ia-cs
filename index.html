@@ -286,6 +286,13 @@
     text-transform: uppercase;
     box-shadow: 0 2px 6px rgba(239,68,68,0.3);
   }
+  .tool-creator {
+    font-size: 10px;
+    color: var(--text-muted, #aaa);
+    margin-top: auto;
+    padding-top: 8px;
+  }
+
   .tool-tag { 
     display: inline-flex;
     align-items: center;
@@ -548,6 +555,10 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
     Prompts
   </button>
+  <button class="nav-tab" onclick="switchTab('videos', this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+    Instância IA — Vídeos
+  </button>
 </div>
 
 <main>
@@ -570,6 +581,7 @@
         <div class="tool-name">Gerador de Gráficos</div>
         <div class="tool-desc">Gera gráficos a partir dos relatórios em Excel retirados do Zendesk.</div>
         <span class="tool-tag">Zendesk</span>
+        <span class="tool-creator">Criado por Jessica Monreal</span>
       </a>
 
       <a href="https://simulador-tabela.netlify.app/" target="_blank" class="tool-card">
@@ -578,6 +590,7 @@
         <div class="tool-name">Simulador de Tabela</div>
         <div class="tool-desc">Simula a fatura do cliente em trocas de tabela.</div>
         <span class="tool-tag">Simulador</span>
+        <span class="tool-creator">Criado por Jessica Monreal</span>
       </a>
 
       <a href="https://apresentacao-black.netlify.app/" target="_blank" class="tool-card">
@@ -586,6 +599,7 @@
         <div class="tool-name">Gerador de Apresentações</div>
         <div class="tool-desc">Gera apresentações com institucional, performance e tickets CS a partir do relatório de Volumetria ou Databricks.</div>
         <span class="tool-tag">Apresentações</span>
+        <span class="tool-creator">Criado por Jessica Monreal</span>
       </a>
 
       <a href="https://simuladormv-ppmetneeg7uuzwzlajbznk.streamlit.app/" target="_blank" class="tool-card">
@@ -594,6 +608,7 @@
         <div class="tool-name">Simulador MV</div>
         <div class="tool-desc">Simulador de preços e prazos para Múltiplos Volumes.</div>
         <span class="tool-tag">Simulador</span>
+        <span class="tool-creator">Criado por Orion Centomain</span>
       </a>
 
       <a href="https://calendario-coletas.streamlit.app/" target="_blank" class="tool-card">
@@ -602,6 +617,7 @@
         <div class="tool-name">Calendário de Coletas</div>
         <div class="tool-desc">Datas de coleta em rotas calendarizadas.</div>
         <span class="tool-tag">Coletas</span>
+        <span class="tool-creator">Criado por Orion Centomain</span>
       </a>
 
       <a href="https://gerador-onepage.netlify.app/" target="_blank" class="tool-card">
@@ -610,6 +626,7 @@
         <div class="tool-name">Gerador de Relatório de Envios - One Page</div>
         <div class="tool-desc">Relatório de performance para envio via Whatsapp, a partir de Extração de Dados - Volumetria ou Databricks.</div>
         <span class="tool-tag">Relatórios</span>
+        <span class="tool-creator">Criado por Jessica Monreal</span>
       </a>
 
       <a href="https://volumetria-app.vercel.app/" target="_blank" class="tool-card">
@@ -618,6 +635,7 @@
         <div class="tool-name">Relatório Base Ops - Transportadoras e Rastreios</div>
         <div class="tool-desc">Gera relatório detalhado sobre SLA de transportadoras ofensoras e rastreios ofensores.</div>
         <span class="tool-tag">Relatórios</span>
+        <span class="tool-creator">Criado por Jones Gregorio</span>
       </a>
 
       <a href="https://jogo-coletas.vercel.app/" target="_blank" class="tool-card" style="position:relative;">
@@ -627,6 +645,7 @@
         <div class="tool-name">Jogo de Coletas</div>
         <div class="tool-desc">Coletar encomendas e levar para o XD.</div>
         <span class="tool-tag">Coletas</span>
+        <span class="tool-creator">Criado por Jessica Monreal</span>
       </a>
 
     </div>
@@ -735,6 +754,43 @@ Calcule:
         </div>
 
       </div>
+    </div>
+  </div>
+
+  <!-- ========== VÍDEOS ========== -->
+  <div class="section-panel" id="panel-videos">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Instância IA — Vídeos</div>
+        <div class="section-subtitle">Gravações das sessões de Instância IA do time de CS</div>
+      </div>
+    </div>
+    <div class="tools-grid">
+
+      <a href="https://drive.google.com/file/d/117_F74WFamIgk2AKqyvW2ClSLLvhuh5r/view?usp=sharing" target="_blank" class="tool-card">
+        <svg class="tool-arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+        <div class="tool-icon">🎥</div>
+        <div class="tool-name">Instância IA — 27/05/2026</div>
+        <div class="tool-desc">Gravação da sessão de Instância IA do dia 27 de maio de 2026.</div>
+        <span class="tool-tag">Vídeo</span>
+      </a>
+
+      <a href="https://drive.google.com/file/d/14ye-C55W-R4bNgx5tufFzLZo-3KFar3F/view?usp=sharing" target="_blank" class="tool-card">
+        <svg class="tool-arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+        <div class="tool-icon">🎥</div>
+        <div class="tool-name">Instância IA — 03/06/2026</div>
+        <div class="tool-desc">Gravação da sessão de Instância IA do dia 03 de junho de 2026.</div>
+        <span class="tool-tag">Vídeo</span>
+      </a>
+
+      <a href="https://drive.google.com/file/d/1kTq8FTFeh3MAGc50TI-HCqbEVj-Ew_7r/view?usp=sharing" target="_blank" class="tool-card">
+        <svg class="tool-arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+        <div class="tool-icon">🎥</div>
+        <div class="tool-name">Instância IA — 10/06/2026</div>
+        <div class="tool-desc">Gravação da sessão de Instância IA do dia 10 de junho de 2026.</div>
+        <span class="tool-tag">Vídeo</span>
+      </a>
+
     </div>
   </div>
 
