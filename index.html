@@ -271,7 +271,22 @@
     flex: 1;
   }
 
-  .tool-tag {
+  .tool-fun-badge {
+    display: inline-block;
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: linear-gradient(135deg, #f59e0b, #ef4444);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 20px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    box-shadow: 0 2px 6px rgba(239,68,68,0.3);
+  }
+  .tool-tag { 
     display: inline-flex;
     align-items: center;
     font-size: 11px;
@@ -603,6 +618,15 @@
         <div class="tool-name">Relatório Base Ops - Transportadoras e Rastreios</div>
         <div class="tool-desc">Gera relatório detalhado sobre SLA de transportadoras ofensoras e rastreios ofensores.</div>
         <span class="tool-tag">Relatórios</span>
+      </a>
+
+      <a href="https://jogo-coletas.vercel.app/" target="_blank" class="tool-card" style="position:relative;">
+        <span class="tool-fun-badge">Para descontrair</span>
+        <svg class="tool-arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+        <div class="tool-icon">🎮</div>
+        <div class="tool-name">Jogo de Coletas</div>
+        <div class="tool-desc">Coletar encomendas e levar para o XD.</div>
+        <span class="tool-tag">Coletas</span>
       </a>
 
     </div>
