@@ -288,6 +288,23 @@
     padding-top: 8px;
   }
 
+  .prompt-obs {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    background: #fff8e6;
+    border: 1px solid #f5d87a;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 12px;
+    color: #7a5c00;
+    margin-bottom: 10px;
+  }
+  .prompt-obs::before {
+    content: '📎';
+    flex-shrink: 0;
+  }
+
   .tool-tag { 
     display: inline-flex;
     align-items: center;
@@ -555,6 +572,10 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
     Instância IA — Vídeos
   </button>
+  <button class="nav-tab" onclick="switchTab('queries', this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+    Queries
+  </button>
 </div>
 
 <main>
@@ -662,11 +683,11 @@
         <div class="sidebar-label">Categorias</div>
         <button class="sidebar-item active" onclick="filterPrompts('todos', this)">
           <span class="sidebar-dot"></span> Todos
-          <span class="prompt-count" id="count-todos">2</span>
+          <span class="prompt-count" id="count-todos">4</span>
         </button>
         <button class="sidebar-item" onclick="filterPrompts('relatorios', this)">
           <span class="sidebar-dot"></span> Relatórios
-          <span class="prompt-count" id="count-relatorios">2</span>
+          <span class="prompt-count" id="count-relatorios">4</span>
         </button>
       </div>
 
@@ -681,6 +702,7 @@
               </button>
             </div>
           </div>
+          <div class="prompt-obs">Anexar: planilha de envios exportada da Extração de Dados — Volumetria (.xlsx)</div>
           <div class="prompt-text">Tenho um arquivo `.xlsx` com dados de envios de um cliente (colunas: `email`, `nome`, `id`, `motivo_criacao`, `codigo_rastreamento`, `codigo_transportadora`, `unidade`, `nro_nf`, `chave_nfe`, `nome_destinatario`, `email_destinatario`, `cpf_destinatario`, `cidade_destino`, `bairro_destino`, `endereco_destino`, `servico_envio`, `transportadora`, `data_envio`, `data_previsao_entrega_cliente`, `data_entrega`, `status`, `uf`, `cep_destino`, `localidade_destino`, `peso_kg`, `altura`, `comprimento`, `largura`, `peso_cubado`, `valor_declarado`, `preco_frete`).
 Gere um dashboard em HTML com os seguintes requisitos:
 Visual: Tons claros com azul e roxo/lavanda. Fontes Syne (títulos) + DM Sans (corpo). Fundo `#f4f3f9`, cards brancos com borda `#dbd7ef`, primária `#5b4fcf`. Animações suaves de entrada nas barras e cards.
@@ -712,6 +734,7 @@ Detalhes técnicos: todo o código em um único `.html` self-contained, sem depe
               </button>
             </div>
           </div>
+          <div class="prompt-obs">Anexar: planilha de envios exportada da Extração de Dados — Volumetria (.xlsx)</div>
           <div class="prompt-text">Tenho uma planilha de envios de um cliente com as colunas: transportadora, data_envio, status, data_previsao_entrega_cliente, data_entrega, servico_envio (valores "Rápido" e "Econômico"). Status possíveis: "Entregue", "Devolvida para remetente", "Devolvida para Mandaê", "Em devolução", "Extraviada".
 Faça uma análise completa em HTML interativo com 2 dashboards separados:
 ─── DASHBOARD 1 — Transportadoras ───────────────────────
@@ -746,6 +769,79 @@ Calcule:
           <div class="prompt-footer">
             <span class="prompt-tag">Relatórios</span>
             <span class="prompt-date">Extração de Dados — Volumetria</span>
+          </div>
+        </div>
+
+        <div class="prompt-card" data-cat="relatorios">
+          <div class="prompt-card-header">
+            <div class="prompt-title">Gerar simulador MV para compartilhar com cliente</div>
+            <div class="prompt-actions">
+              <button class="prompt-btn" title="Copiar" onclick="copyPrompt(this)">
+                <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="prompt-obs">Anexar: tabela de preços do cliente (.xlsx)</div>
+          <div class="prompt-text">Preciso de um simulador de frete em HTML (arquivo único, sem dependências externas) baseado na tabela de preços do arquivo Excel anexo.
+**Regras de negócio:**
+**Peso a considerar:**
+1. Calcular o peso cubado de cada caixa: altura × largura × comprimento × 0,000167
+2. Somar todos os pesos reais → total real
+3. Somar todos os pesos cubados → total cubado
+4. Se o total cubado for ≤ 10 kg → usar o total real
+5. Se o total cubado for > 10 kg → usar o maior entre total real e total cubado
+6. Esse peso final (em gramas, arredondado para cima) é usado para buscar o preço na tabela
+**Estrutura do Excel:**
+- Aba "Preços Econômico (com imposto)" e "Preços Rápido (com imposto)":
+  - Cada aba tem duas seções: Área 1 (linhas 6–62 + kg adicional linha 63) e Área 2 (linhas 67–123 + kg adicional linha 124)
+  - Cada seção tem Capital (colunas 3–29, estados SP a TO) e Interior (colunas 33–59, mesmos estados)
+  - O peso está em gramas (coluna 1 = início, coluna 2 = fim da faixa)
+  - Se o peso ultrapassar 50.000g, usar o preço da última faixa + kg adicional × kg excedentes (arredondado para cima)
+- Aba "Abrangencia Econômico" e "Abrangencia Rápido":
+  - Colunas: CEP início, CEP fim, UF, Tipo (Capital/Interior), Taxa de seguro, Área (Área 1 ou Área 2), Prazo (dias úteis)
+  - ~14.800 linhas ordenadas por CEP → usar busca binária para lookup
+**Interface:**
+- Seletor de modalidade: Econômico ou Rápido
+- Campo de CEP de destino (com máscara 00000-000)
+- Campo de valor declarado total (R$) — o seguro é valor declarado × taxa de seguro do CEP
+- Seção de caixas: botão para adicionar quantas caixas quiser, cada uma com campos de peso real (kg), comprimento, largura e altura (cm); botão para remover caixas adicionais
+- Botão "Calcular Frete"
+- Resultado em modal com: preço total destacado, prazo, detalhamento por caixa (peso real e cubado de cada uma), total real, total cubado, peso efetivamente cobrado (com indicação se é real ou cubado), frete base, seguro e total
+**Dados embutidos no HTML:**
+- Tabelas de preços (Área 1 e Área 2, econômico e rápido) em JSON inline
+- Tabelas de cobertura comprimidas em gzip+base64 e descomprimidas via DecompressionStream no browser
+**Layout:**
+- Fundo claro com tons de azul/arroxeado</div>
+          <div class="prompt-footer">
+            <span class="prompt-tag">Relatórios</span>
+          </div>
+        </div>
+
+        <div class="prompt-card" data-cat="relatorios">
+          <div class="prompt-card-header">
+            <div class="prompt-title">Dashboard de férias</div>
+            <div class="prompt-actions">
+              <button class="prompt-btn" title="Copiar" onclick="copyPrompt(this)">
+                <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="prompt-obs">Anexar: planilha com divisão de férias (.xlsx)</div>
+          <div class="prompt-text">Tenho uma planilha Excel com minha divisão de carteira de clientes para o período de férias. Vou te anexar agora.
+A planilha tem uma aba única com: Cliente · Nível de criticidade · Executivo de backup · Contato principal · Todos os contatos · Observações · CNPJ · Pendências (JIRA/BKO)
+Me entrega um dashboard em HTML (arquivo único) com:
+
+* Header escuro com título e período de férias
+* Pills clicáveis por executivo de backup para filtrar a tabela
+* Busca por nome de cliente
+* Tabela filtrável com todos os clientes
+* Modal ao clicar em cada cliente com contatos (links WhatsApp clicáveis), observações completas, CNPJ e pendências
+* Pendências separadas em JIRA e BKO com badges coloridos — JIRA: ignorar Fechado, Concluído e "Priorizar com Produto"; BKO: ignorar Concluído, status em branco = "Em aberto"
+* Cards de distribuição por executivo na parte inferior
+* Design limpo e profissional, responsivo
+Depois do HTML, me manda também o código `.gs` para publicar no Google Apps Script como Web App.</div>
+          <div class="prompt-footer">
+            <span class="prompt-tag">Relatórios</span>
           </div>
         </div>
 
@@ -790,6 +886,95 @@ Calcule:
         <span class="tool-creator">Tema: Claude no Zendesk, Dashboard de Transportadoras e Projetos na Claude (incluindo projeto com base no material da Weekly Last Mile)</span>
       </a>
 
+      <a href="https://drive.google.com/file/d/1VpVD8IHgdlLkBtsr6SAak1pD2cCXlq5H/view?usp=sharing" target="_blank" class="tool-card">
+        <svg class="tool-arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+        <div class="tool-icon">🎥</div>
+        <div class="tool-name">Instância IA — 17/06/2026</div>
+        <div class="tool-desc">Gravação da sessão de Instância IA do dia 17 de junho de 2026.</div>
+        <span class="tool-tag">Vídeo</span>
+        <span class="tool-creator">Tema: Databricks, Mensagem no Whatsapp, Sefaz e Automatização de planilhas para clientes usando Claude</span>
+      </a>
+
+      <a href="https://drive.google.com/file/d/1VKSXL2dS0IwwJ7k11vMiUZekdzAHyxVL/view" target="_blank" class="tool-card">
+        <svg class="tool-arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+        <div class="tool-icon">🎥</div>
+        <div class="tool-name">Instância IA — 01/07/2026</div>
+        <div class="tool-desc">Gravação da sessão de Instância IA do dia 01 de julho de 2026.</div>
+        <span class="tool-tag">Vídeo</span>
+        <span class="tool-creator">Tema: Diferenças entre Gemini, Chat GPT, Claude e Perplexity. Ferramentas para organização</span>
+      </a>
+
+      <a href="https://drive.google.com/drive/search?q=inst%C3%A2ncia%20IA" target="_blank" class="tool-card">
+        <svg class="tool-arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+        <div class="tool-icon">🎥</div>
+        <div class="tool-name">Instância IA — 08/07/2026</div>
+        <div class="tool-desc">Gravação da sessão de Instância IA do dia 08 de julho de 2026.</div>
+        <span class="tool-tag">Vídeo</span>
+        <span class="tool-creator">Tema: Dashboard de férias e dashboard de casos operacionais (Rastreios e JIRAs)</span>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- ========== QUERIES ========== -->
+  <div class="section-panel" id="panel-queries">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Queries</div>
+        <div class="section-subtitle">Queries prontas para extração de dados no Databricks</div>
+      </div>
+    </div>
+
+    <div style="max-width: 860px;">
+      <div style="background:#fff; border:1px solid var(--border); border-radius:16px; padding:28px 32px; box-shadow:0 4px 16px rgba(26,63,207,0.07);">
+        <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:16px;">
+          <div>
+            <div style="font-size:17px; font-weight:600; color:var(--text-primary); margin-bottom:4px;">Extração de Dados — Volumetria</div>
+            <div style="font-size:13px; color:var(--text-muted);">⚠️ Ajustar ID do V3 do cliente e datas. Se tiver mais de um ID do V3, colocar separados por vírgulas e sem espaços.</div>
+          </div>
+          <button onclick="copyQuery(this)" title="Copiar query" style="flex-shrink:0; display:flex; align-items:center; gap:6px; background:var(--tag-bg); color:var(--tag-text); border:none; border-radius:8px; padding:8px 14px; font-size:13px; font-weight:500; cursor:pointer; transition:background 0.2s;">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copiar
+          </button>
+        </div>
+        <pre id="query-volumetria" style="background:#f0f4ff; border:1px solid var(--border); border-radius:10px; padding:20px; font-size:12.5px; line-height:1.7; color:#1a2a5e; overflow-x:auto; white-space:pre; font-family:'Courier New', monospace; margin:0;">--- query volumetria ---
+SELECT
+--- dados cliente ---
+email,
+account_name as nome_comercial,
+id,
+--- remessa ---
+creation_reason as motivo_criacao,
+tracking_code as codigo_rastreamento,
+carrier_tracking_code as codigo_rastreio_transportadora,
+operational_unit_code as unidade,
+invoice_number as nro_nf,
+invoice_access_key as chave_nfe,
+shipping_service_name AS servico_envio,
+carrier_name as transportadora,
+CAST(shipped_at_ts AS DATE) AS data_envio,
+CAST(delivery_estimated_date AS DATE) AS data_previsao_entrega_cliente,
+CAST(delivered_date AS DATE) AS data_entrega,
+shipment_status_name AS status,
+destination_state_code AS uf,
+destination_city_name AS cidade_destino,
+-- detalhes order --
+destination_zip_code AS cep_destino,
+CASE WHEN weight_kg IS NULL THEN 0 ELSE ROUND(CAST(weight_kg AS DECIMAL(18,2)), 2) END AS peso_kg,
+COALESCE(length_cm, 0) AS comprimento,
+COALESCE(width_cm, 0) AS largura,
+COALESCE(height_cm, 0) AS altura,
+insured_value as valor_declarado,
+shipping_price as preco_frete
+FROM hive_metastore.data_logistics.s__operations__collect_shipment__event
+WHERE 
+email IS NOT NULL
+AND destination_state_code IS NOT NULL
+AND id IS NOT NULL
+AND id_v3 IN ('2144226')
+AND CAST(shipped_at_ts AS DATE) BETWEEN DATE '2026-05-01' AND DATE '2026-06-15'
+--- AND CAST(shipped_at_ts AS DATE) >= DATE '2026-04-01' 1085831</pre>
+      </div>
     </div>
   </div>
 
@@ -813,11 +998,19 @@ function filterPrompts(cat, btn) {
   });
 }
 
+function copyQuery(btn) {
+  const pre = btn.closest('div').nextElementSibling;
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    const original = btn.innerHTML;
+    btn.innerHTML = '✓ Copiado!';
+    setTimeout(() => btn.innerHTML = original, 2000);
+  });
+}
+
 function copyPrompt(btn) {
   const text = btn.closest('.prompt-card').querySelector('.prompt-text').textContent.trim();
   navigator.clipboard.writeText(text).then(() => showToast('✓ Prompt copiado!'));
 }
-
 
 function addTool() {
   const name = prompt('Nome da ferramenta:');
