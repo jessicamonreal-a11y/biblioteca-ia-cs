@@ -1075,6 +1075,73 @@ AND CAST(shipped_at_ts AS DATE) BETWEEN DATE '2026-05-01' AND DATE '2026-06-15'
 --- AND CAST(shipped_at_ts AS DATE) >= DATE '2026-04-01' 1085831</pre>
       </div>
 
+      <div style="background:#fff; border:1px solid var(--border); border-radius:16px; padding:28px 32px; box-shadow:0 4px 16px rgba(26,63,207,0.07); margin-top:24px;">
+        <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:16px;">
+          <div>
+            <div style="font-size:17px; font-weight:600; color:var(--text-primary); margin-bottom:4px;">Pacotes e Faturamento</div>
+            <div style="font-size:13px; color:var(--text-muted);">⚠️ Ajustar o executivo da carteira em account_executive (ex.: erica.pereira).</div>
+          </div>
+          <button onclick="copyQuery(this)" title="Copiar query" style="flex-shrink:0; display:flex; align-items:center; gap:6px; background:var(--tag-bg); color:var(--tag-text); border:none; border-radius:8px; padding:8px 14px; font-size:13px; font-weight:500; cursor:pointer; transition:background 0.2s;">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copiar
+          </button>
+        </div>
+        <pre id="query-pacotes-faturamento" style="background:#f0f4ff; border:1px solid var(--border); border-radius:10px; padding:20px; font-size:12.5px; line-height:1.7; color:#1a2a5e; overflow-x:auto; white-space:pre; font-family:'Courier New', monospace; margin:0;">DECLARE OR REPLACE VARIABLE l3 STRING;
+DECLARE OR REPLACE VARIABLE l2 STRING;
+DECLARE OR REPLACE VARIABLE l1 STRING;
+DECLARE OR REPLACE VARIABLE l0 STRING;
+DECLARE OR REPLACE VARIABLE sql_txt STRING;
+
+SET VAR l3 = concat(element_at(array('jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'), month(add_months(current_date(), -3))), '_', year(add_months(current_date(), -3)));
+SET VAR l2 = concat(element_at(array('jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'), month(add_months(current_date(), -2))), '_', year(add_months(current_date(), -2)));
+SET VAR l1 = concat(element_at(array('jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'), month(add_months(current_date(), -1))), '_', year(add_months(current_date(), -1)));
+SET VAR l0 = concat(element_at(array('jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'), month(current_date())), '_', year(current_date()), '_parcial');
+
+SET VAR sql_txt = replace(concat(
+'WITH carteira AS (
+  SELECT DISTINCT id_v3, account_name
+  FROM data_products_prd.data_manual.ext__logistics__cs_cx_onboarding__account_name
+  WHERE account_executive = #Q#erica.pereira#Q#
+  ),
+base AS (
+  SELECT
+    ca.account_name AS cliente,
+    date_trunc(#Q#month#Q#, CAST(re.data_hora_envio AS DATE)) AS mes,
+    re.id AS id_remessa,
+    CAST(re.valor AS DECIMAL(18,2)) AS valor_frete
+  FROM bronze_risk.logistics.mandae_remessa re
+  INNER JOIN bronze_risk.logistics.mandae_cliente cl ON cl.usuario_fk = re.cliente_fk
+  INNER JOIN bronze_risk.logistics.mandae_usuario us ON us.id = cl.usuario_fk
+  INNER JOIN carteira ca ON ca.id_v3 = us.id
+  INNER JOIN bronze_risk.logistics.mandae_destinatario de ON de.id = re.destinatario_fk
+  INNER JOIN bronze_risk.logistics.mandae_endereco en ON en.id = de.endereco_fk
+  WHERE re.situacao &lt;&gt; 8
+    AND us.email IS NOT NULL
+    AND cl.grupo_configuracao_id IS NOT NULL
+    AND en.uf IS NOT NULL
+    AND CAST(re.data_hora_envio AS DATE) &gt;= date_trunc(#Q#month#Q#, add_months(current_date(), -3))
+    AND CAST(re.data_hora_envio AS DATE) &lt; add_months(date_trunc(#Q#month#Q#, current_date()), 1)
+)
+SELECT
+  cliente,
+  COUNT(DISTINCT CASE WHEN mes = add_months(date_trunc(#Q#month#Q#, current_date()), -3) THEN id_remessa END) AS envios_', l3, ',
+  COUNT(DISTINCT CASE WHEN mes = add_months(date_trunc(#Q#month#Q#, current_date()), -2) THEN id_remessa END) AS envios_', l2, ',
+  COUNT(DISTINCT CASE WHEN mes = add_months(date_trunc(#Q#month#Q#, current_date()), -1) THEN id_remessa END) AS envios_', l1, ',
+  COUNT(DISTINCT CASE WHEN mes = date_trunc(#Q#month#Q#, current_date()) THEN id_remessa END) AS envios_', l0, ',
+  COUNT(DISTINCT id_remessa) AS envios_total,
+  SUM(CASE WHEN mes = add_months(date_trunc(#Q#month#Q#, current_date()), -3) THEN valor_frete ELSE 0 END) AS fat_', l3, ',
+  SUM(CASE WHEN mes = add_months(date_trunc(#Q#month#Q#, current_date()), -2) THEN valor_frete ELSE 0 END) AS fat_', l2, ',
+  SUM(CASE WHEN mes = add_months(date_trunc(#Q#month#Q#, current_date()), -1) THEN valor_frete ELSE 0 END) AS fat_', l1, ',
+  SUM(CASE WHEN mes = date_trunc(#Q#month#Q#, current_date()) THEN valor_frete ELSE 0 END) AS fat_', l0, ',
+  SUM(valor_frete) AS fat_total
+FROM base
+GROUP BY cliente
+ORDER BY fat_total DESC'
+), '#Q#', char(39));
+
+EXECUTE IMMEDIATE sql_txt;</pre>
+      </div>
+
     </div>
   </div>
 
