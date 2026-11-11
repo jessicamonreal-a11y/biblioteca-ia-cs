@@ -548,6 +548,7 @@
     .prompt-sidebar { position: static; }
     .tools-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
   }
+
 </style>
 <script data-goatcounter="https://jessicamonreal.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
@@ -599,6 +600,16 @@
     </div>
 
     <div class="tools-grid" id="grid-ia">
+
+      <a href="https://claude.ai/artifact/WL4if5Ap9HTfY2UBTLuhYR" target="_blank" class="tool-card" style="position:relative;">
+        <span class="tool-fun-badge" style="background: linear-gradient(135deg, #1a3fcf, #6685ee);">Novo</span>
+        <svg class="tool-arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+        <div class="tool-icon">📈</div>
+        <div class="tool-name">Diagnóstico SOW</div>
+        <div class="tool-desc">Análise completa de SOW por cliente e executivo.</div>
+        <span class="tool-tag">Análise</span>
+        <span class="tool-creator">Criado por Erica Cintra</span>
+      </a>
 
       <a href="https://gerador-graficos-cs-mandae.streamlit.app/" target="_blank" class="tool-card">
         <svg class="tool-arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
@@ -752,11 +763,11 @@
         <div class="sidebar-label">Categorias</div>
         <button class="sidebar-item active" onclick="filterPrompts('todos', this)">
           <span class="sidebar-dot"></span> Todos
-          <span class="prompt-count" id="count-todos">4</span>
+          <span class="prompt-count" id="count-todos">5</span>
         </button>
         <button class="sidebar-item" onclick="filterPrompts('relatorios', this)">
           <span class="sidebar-dot"></span> Relatórios
-          <span class="prompt-count" id="count-relatorios">4</span>
+          <span class="prompt-count" id="count-relatorios">5</span>
         </button>
       </div>
 
@@ -909,6 +920,16 @@ Me entrega um dashboard em HTML (arquivo único) com:
 * Cards de distribuição por executivo na parte inferior
 * Design limpo e profissional, responsivo
 Depois do HTML, me manda também o código `.gs` para publicar no Google Apps Script como Web App.</div>
+          <div class="prompt-footer">
+            <span class="prompt-tag">Relatórios</span>
+          </div>
+        </div>
+
+        <div class="prompt-card" data-cat="relatorios">
+          <div class="prompt-card-header">
+            <div class="prompt-title">Prompt - Diagnóstico SOW — fazendo a análise em conversa com o Claude</div>
+          </div>
+          <div class="prompt-text"><a href="https://claude.ai/artifact/57BPpk3FayBxJf167spTnV" target="_blank" rel="noopener noreferrer" style="color:#1a3fcf;font-weight:600;">🔗 Abrir Prompt - Diagnóstico SOW no Claude</a></div>
           <div class="prompt-footer">
             <span class="prompt-tag">Relatórios</span>
           </div>
@@ -1262,6 +1283,7 @@ EXECUTE IMMEDIATE sql_txt;</pre>
 
     </div>
   </div>
+
 
 </main>
 
